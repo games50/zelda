@@ -16,34 +16,34 @@ function PlayerSwingSwordState:init(player, dungeon)
     self.player.offsetY = 5
     self.player.offsetX = 8
 
-    -- create hurtbox based on where the player is and facing
+    -- create hitbox based on where the player is and facing
     local direction = self.player.direction
     
-    local hurtboxX, hurtboxY, hurtboxWidth, hurtboxHeight
+    local hitboxX, hitboxY, hitboxWidth, hitboxHeight
 
     if direction == 'left' then
-        hurtboxWidth = 8
-        hurtboxHeight = 16
-        hurtboxX = self.player.x - hurtboxWidth
-        hurtboxY = self.player.y + 2
+        hitboxWidth = 8
+        hitboxHeight = 16
+        hitboxX = self.player.x - hitboxWidth
+        hitboxY = self.player.y + 2
     elseif direction == 'right' then
-        hurtboxWidth = 8
-        hurtboxHeight = 16
-        hurtboxX = self.player.x + self.player.width
-        hurtboxY = self.player.y + 2
+        hitboxWidth = 8
+        hitboxHeight = 16
+        hitboxX = self.player.x + self.player.width
+        hitboxY = self.player.y + 2
     elseif direction == 'up' then
-        hurtboxWidth = 16
-        hurtboxHeight = 8
-        hurtboxX = self.player.x
-        hurtboxY = self.player.y - hurtboxHeight
+        hitboxWidth = 16
+        hitboxHeight = 8
+        hitboxX = self.player.x
+        hitboxY = self.player.y - hitboxHeight
     else
-        hurtboxWidth = 16
-        hurtboxHeight = 8
-        hurtboxX = self.player.x
-        hurtboxY = self.player.y + self.player.height
+        hitboxWidth = 16
+        hitboxHeight = 8
+        hitboxX = self.player.x
+        hitboxY = self.player.y + self.player.height
     end
 
-    self.swordHurtbox = Hurtbox(hurtboxX, hurtboxY, hurtboxWidth, hurtboxHeight)
+    self.swordHitbox = Hitbox(hitboxX, hitboxY, hitboxWidth, hitboxHeight)
     self.player:changeAnimation('sword-' .. self.player.direction)
 end
 
@@ -56,9 +56,9 @@ function PlayerSwingSwordState:enter(params)
 end
 
 function PlayerSwingSwordState:update(dt)
-    -- check if hurtbox collides with any entities in the scene
+    -- check if hitbox collides with any entities in the scene
     for k, entity in pairs(self.dungeon.currentRoom.entities) do
-        if entity:collides(self.swordHurtbox) then
+        if entity:collides(self.swordHitbox) then
             entity:damage(1)
             gSounds['hit-enemy']:play()
         end
