@@ -131,16 +131,19 @@ function Dungeon:finishShifting()
 end
 
 function Dungeon:update(dt)
+    
     -- pause updating if we're in the middle of shifting
     if not self.shifting then    
         self.currentRoom:update(dt)
     else
+        
         -- still update the player animation if we're shifting rooms
         self.player.currentAnimation:update(dt)
     end
 end
 
 function Dungeon:render()
+    
     -- translate the camera if we're actively shifting
     if self.shifting then
         love.graphics.translate(-math.floor(self.cameraX), -math.floor(self.cameraY))
