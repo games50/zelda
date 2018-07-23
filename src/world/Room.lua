@@ -147,6 +147,7 @@ function Room:generateWallsAndFloors()
 end
 
 function Room:update(dt)
+    
     -- don't update anything if we are sliding to another room (we have offsets)
     if self.adjacentOffsetX ~= 0 or self.adjacentOffsetY ~= 0 then return end
 

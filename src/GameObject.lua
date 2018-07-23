@@ -9,6 +9,7 @@
 GameObject = Class{}
 
 function GameObject:init(def, x, y)
+    
     -- string identifying this object type
     self.type = def.type
 

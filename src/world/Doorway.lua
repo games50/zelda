@@ -13,6 +13,8 @@ function Doorway:init(direction, open, room)
     self.open = open
     self.room = room
 
+    -- doorways will always be in the same place for this example, so we hard-code their locations
+    -- based on which direction in the room they're assigned
     if direction == 'left' then
         self.x = MAP_RENDER_OFFSET_X
         self.y = MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE
@@ -44,6 +46,8 @@ function Doorway:render(offsetX, offsetY)
     self.x = self.x + offsetX
     self.y = self.y + offsetY
 
+    -- the doors are composite sprites, since the tiles are smaller than they are,
+    -- so we have to draw four sprites together for each doorway
     if self.direction == 'left' then
         if self.open then
             love.graphics.draw(texture, quads[181], self.x - TILE_SIZE, self.y)

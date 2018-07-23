@@ -28,7 +28,11 @@ function StateMachine:render()
 end
 
 --[[
-	Used for states that can be controlled by the AI to influence update logic.
+	Used for states that can be controlled by the AI to influence update logic. By having this and
+	not just bundling the decision-making into :update, we allow ourselves to reuse states between
+	the player and agents in our game, rather than create a separate state for each (or at least
+	allow the player to use the base state and then call its own inherited version of that state to
+	save on code) See how PlayerWalkState calls EntityWalkState.update within :update for an example.
 ]]
 function StateMachine:processAI(params, dt)
 	self.current:processAI(params, dt)

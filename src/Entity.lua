@@ -33,6 +33,8 @@ function Entity:init(def)
     self.invulnerable = false
     self.invulnerableDuration = 0
     self.invulnerableTimer = 0
+
+    -- timer for turning transparency on and off, flashing
     self.flashTimer = 0
 
     self.dead = false

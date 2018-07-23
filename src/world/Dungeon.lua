@@ -11,6 +11,7 @@ Dungeon = Class{}
 function Dungeon:init(player)
     self.player = player
 
+    -- container we could use to store rooms in a static dungeon, but unused here
     self.rooms = {}
 
     -- current room we're operating in
@@ -19,7 +20,7 @@ function Dungeon:init(player)
     -- room we're moving camera to during a shift; becomes active room afterwards
     self.nextRoom = nil
 
-    -- love.graphics.translate values, only when shifting screens
+    -- love.graphics.translate values, only when shifting screens and reset to 0 afterwards
     self.cameraX = 0
     self.cameraY = 0
     self.shifting = false
@@ -47,6 +48,8 @@ end
     Prepares for the camera shifting process, kicking off a tween of the camera position.
 ]]
 function Dungeon:beginShifting(shiftX, shiftY)
+
+    -- commence shifting and create a new room to transition to
     self.shifting = true
     self.nextRoom = Room(self.player)
 
@@ -55,12 +58,14 @@ function Dungeon:beginShifting(shiftX, shiftY)
         doorway.open = true
     end
 
+    -- offset set depending on which direction we generate the room
     self.nextRoom.adjacentOffsetX = shiftX
     self.nextRoom.adjacentOffsetY = shiftY
 
     -- tween the player position so they move through the doorway
     local playerX, playerY = self.player.x, self.player.y
 
+    -- figure out where player's X or Y should end up in the next room off screen
     if shiftX > 0 then
         playerX = VIRTUAL_WIDTH + (MAP_RENDER_OFFSET_X + TILE_SIZE)
     elseif shiftX < 0 then
@@ -77,9 +82,11 @@ function Dungeon:beginShifting(shiftX, shiftY)
         [self] = {cameraX = shiftX, cameraY = shiftY},
         [self.player] = {x = playerX, y = playerY}
     }):finish(function()
+
+        -- set everything back to 0, with next room now the current room
         self:finishShifting()
 
-        -- reset player to the correct location in the room
+        -- reset player to the correct location in this room, negating off-screen offsets
         if shiftX < 0 then
             self.player.x = MAP_RENDER_OFFSET_X + (MAP_WIDTH * TILE_SIZE) - TILE_SIZE - self.player.width
             self.player.direction = 'left'
@@ -108,11 +115,17 @@ end
     current room.
 ]]
 function Dungeon:finishShifting()
+
+    -- reset camera and deactivate shifting to avoid translation
     self.cameraX = 0
     self.cameraY = 0
     self.shifting = false
+
+    -- point to transitioned room as the new active room, pointing to an empty room next
     self.currentRoom = self.nextRoom
     self.nextRoom = nil
+
+    -- this room (previously the off-screen room) should now be in the center, not offset
     self.currentRoom.adjacentOffsetX = 0
     self.currentRoom.adjacentOffsetY = 0 
 end

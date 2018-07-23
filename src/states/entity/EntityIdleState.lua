@@ -18,6 +18,10 @@ function EntityIdleState:init(entity)
     self.waitTimer = 0
 end
 
+--[[
+    We can call this function if we want to use this state on an agent in our game; otherwise,
+    we can use this same state in our Player class and have it not take action.
+]]
 function EntityIdleState:processAI(params, dt)
     if self.waitDuration == 0 then
         self.waitDuration = math.random(5)
