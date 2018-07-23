@@ -80,16 +80,13 @@ end
     Randomly creates an assortment of obstacles for the player to navigate around.
 ]]
 function Room:generateObjects()
-    table.insert(self.objects, GameObject(
+    local switch = GameObject(
         GAME_OBJECT_DEFS['switch'],
         math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
                     VIRTUAL_WIDTH - TILE_SIZE * 2 - 16),
         math.random(MAP_RENDER_OFFSET_Y + TILE_SIZE,
                     VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
-    ))
-
-    -- get a reference to the switch
-    local switch = self.objects[1]
+    )
 
     -- define a function for the switch that will open all doors in the room
     switch.onCollide = function()
@@ -104,6 +101,9 @@ function Room:generateObjects()
             gSounds['door']:play()
         end
     end
+
+    -- add to list of objects in scene (only one switch for now)
+    table.insert(self.objects, switch)
 end
 
 --[[
@@ -212,12 +212,13 @@ function Room:render()
 
     -- stencil out the door arches so it looks like the player is going through
     love.graphics.stencil(function()
+        
         -- left
         love.graphics.rectangle('fill', -TILE_SIZE - 6, MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE,
             TILE_SIZE * 2 + 6, TILE_SIZE * 2)
         
         -- right
-        love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH * TILE_SIZE) - 6,
+        love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH * TILE_SIZE),
             MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE, TILE_SIZE * 2 + 6, TILE_SIZE * 2)
         
         -- top
@@ -236,4 +237,28 @@ function Room:render()
     end
 
     love.graphics.setStencilTest()
+
+    --
+    -- DEBUG DRAWING OF STENCIL RECTANGLES
+    --
+
+    -- love.graphics.setColor(255, 0, 0, 100)
+    
+    -- -- left
+    -- love.graphics.rectangle('fill', -TILE_SIZE - 6, MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE,
+    -- TILE_SIZE * 2 + 6, TILE_SIZE * 2)
+
+    -- -- right
+    -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH * TILE_SIZE),
+    --     MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE, TILE_SIZE * 2 + 6, TILE_SIZE * 2)
+
+    -- -- top
+    -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
+    --     -TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
+
+    -- --bottom
+    -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
+    --     VIRTUAL_HEIGHT - TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
+    
+    -- love.graphics.setColor(255, 255, 255, 255)
 end
