@@ -65,9 +65,9 @@ gFonts = {
 }
 
 gSounds = {
-    ['music'] = love.audio.newSource('sounds/music.mp3'),
-    ['sword'] = love.audio.newSource('sounds/sword.wav'),
-    ['hit-enemy'] = love.audio.newSource('sounds/hit_enemy.wav'),
-    ['hit-player'] = love.audio.newSource('sounds/hit_player.wav'),
-    ['door'] = love.audio.newSource('sounds/door.wav')
+    ['music'] = love.audio.newSource('sounds/music.mp3', 'static'),
+    ['sword'] = love.audio.newSource('sounds/sword.wav', 'static'),
+    ['hit-enemy'] = love.audio.newSource('sounds/hit_enemy.wav', 'static'),
+    ['hit-player'] = love.audio.newSource('sounds/hit_player.wav', 'static'),
+    ['door'] = love.audio.newSource('sounds/door.wav', 'static')
 }
