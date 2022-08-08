@@ -12,6 +12,7 @@ function love.load()
     math.randomseed(os.time())
     love.window.setTitle('Legend of Zelda')
     love.graphics.setDefaultFilter('nearest', 'nearest')
+    loadDependencies()
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
