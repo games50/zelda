@@ -12,6 +12,7 @@ require 'src.Dependencies'
 local paused = false
 
 function love.load()
+    love.setDeprecationOutput(false)
     math.randomseed(os.time())
     love.window.setTitle('Legend of Zelda')
 
