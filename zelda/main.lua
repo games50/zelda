@@ -9,7 +9,10 @@
 love.graphics.setDefaultFilter('nearest', 'nearest')
 require 'src.Dependencies'
 
+local paused = false
+
 function love.load()
+    love.setDeprecationOutput(false)
     math.randomseed(os.time())
     love.window.setTitle('Legend of Zelda')
 
@@ -49,8 +52,14 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    Timer.update(dt)
-    gStateMachine:update(dt)
+    if love.keyboard.wasPressed('p') then
+        paused = not paused
+    end
+
+    if not paused then
+        Timer.update(dt)
+        gStateMachine:update(dt)
+    end
 
     love.keyboard.keysPressed = {}
 end

@@ -203,4 +203,10 @@ function DungeonTestState:render()
         love.graphics.print(visitedText, VIRTUAL_WIDTH - 60, VIRTUAL_HEIGHT - 10 - counter * 12)
         counter = counter + 1
     end
+
+    -- print head
+    love.graphics.print('Head: ' .. self.head, 60, VIRTUAL_HEIGHT - 20)
+
+    -- print length of queue beneath head
+    love.graphics.print('Queue length: ' .. #self.queue, 60, VIRTUAL_HEIGHT - 10)
 end

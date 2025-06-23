@@ -34,16 +34,23 @@ function DungeonMaker.generate(player, maxRooms)
             end
         end
 
-        -- start at 10 so that we can move left and up in generating without
-        -- going into negative indices
+        -- start at 10 on Y, half X so that we can move upwards
+        -- a la the original Legend of Zelda
         local startX = math.max(1, maxRooms / 2)
         local startY = maxRooms
 
+        -- queue stores the rooms to be visited and generated
         local queue = { { x = startX, y = startY } }
+
+        -- head is the index of the next room to process in the queue
         local head = 1
+
+        -- visited keeps track of which rooms have been created
         local visited = { [startX .. ',' .. startY] = true }
         local numRooms = 0
 
+        -- queueing works such that we can process rooms in a breadth-first manner,
+        -- ensuring that we explore all directions from the current room before
         while head <= #queue and numRooms < maxRooms do
             -- pop a room from the queue
             local current = queue[head]
@@ -73,7 +80,7 @@ function DungeonMaker.generate(player, maxRooms)
             -- get the current room
             local room = rooms[cy][cx]
 
-            -- randomly shuffle directions to explore
+            -- randomly shuffle directions to explore (Fisher-Yates shuffle)
             local directions = {'up', 'down', 'left', 'right'}
             for i = #directions, 2, -1 do
                 local j = math.random(i)

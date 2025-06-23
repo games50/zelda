@@ -105,7 +105,7 @@ end
 
 function Entity:render(adjacentOffsetX, adjacentOffsetY)
     
-    -- draw sprite slightly transparent if invulnerable every 0.04 seconds
+    -- draw sprite slightly transparent if invulnerable every 0.06 seconds
     if self.invulnerable and self.flashTimer > 0.06 then
         self.flashTimer = 0
         love.graphics.setColor(1, 1, 1, 64/255)

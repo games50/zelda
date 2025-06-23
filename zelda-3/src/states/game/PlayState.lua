@@ -27,7 +27,6 @@ function PlayState:init()
     }
 
     self.dungeon = DungeonMaker.generate(self.player, 10)
-    self.currentRoom = Room(self.player)
     
     self.player.stateMachine = StateMachine {
         ['walk'] = function() return PlayerWalkState(self.player, self.dungeon) end,
