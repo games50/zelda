@@ -37,6 +37,10 @@ function Room:init(player, x, y)
     self.adjacentOffsetY = 0
 end
 
+--[[
+    Generates doorways to adjacent rooms based on the current room's position
+    in the grid of rooms. (Only used in the generator)
+]]
 function Room:generateDoorways(rooms, x, y)
     self.doorways = {}
 

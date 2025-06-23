@@ -7,6 +7,7 @@
 ]]
 
 PlayState = Class{__includes = BaseState}
+local renderMap = false
 
 function PlayState:init()
     self.player = Player {
@@ -42,6 +43,10 @@ function PlayState:update(dt)
         love.event.quit()
     end
 
+    if love.keyboard.wasPressed('m') then
+        renderMap = not renderMap
+    end
+
     self.dungeon:update(dt)
 end
 
@@ -68,5 +73,28 @@ function PlayState:render()
             (i - 1) * (TILE_SIZE + 1), 2)
         
         healthLeft = healthLeft - 2
+    end
+
+    -- render grid of dungeon (8px tiles), top right of screen, if flag enabled
+    if renderMap then
+        love.graphics.setColor(0, 0, 0, 0.5)
+        love.graphics.rectangle('fill', VIRTUAL_WIDTH - 92, 16, 82, 82)
+        love.graphics.setColor(1, 1, 1, 0.5)
+        for y = 1, #self.dungeon.rooms do
+            for x = 1, #self.dungeon.rooms[y] do
+                if self.dungeon.rooms[y][x] then
+                    if self.dungeon.currentRoom.x == x and
+                       self.dungeon.currentRoom.y == y then
+                        love.graphics.setColor(1, 0, 0, 0.5)
+                    else
+                        love.graphics.setColor(0, 1, 0, 0.5)
+                    end
+                end
+                love.graphics.rectangle('fill', (x - 1) * 8 + VIRTUAL_WIDTH - 90,
+                        (y - 1) * 8 + 18, 8 - 2, 8 - 2)
+                love.graphics.setColor(1, 1, 1, 0.5)
+            end
+        end
+        love.graphics.setColor(1, 1, 1, 1)
     end
 end

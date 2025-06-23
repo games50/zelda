@@ -12,12 +12,12 @@
     for the problem set).
 
     The DungeonMaker's generate function will essentially crawl through the
-    dungeon and operate like a random stack-based maze generator, where
-    it will randomly select a room to create, then randomly select a direction
-    to create a new room in, and then continue until it has created a certain
-    number of rooms or reached a certain depth.
+    dungeon and operate like a random queue-based maze generator, where
+    it will randomly select a room to create, then randomly select directions
+    to create new rooms in (FIFO), and then continue until it has created a certain
+    number of rooms.
 
-    The DungeonMaker is also be responsible for ensuring that the rooms
+    The DungeonMaker is also responsible for ensuring that the rooms
     do not overlap and that they are all connected in some way.
 ]]
 

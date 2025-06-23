@@ -47,7 +47,8 @@ function Entity:createAnimations(animations)
         animationsReturned[k] = Animation {
             texture = animationDef.texture or 'entities',
             frames = animationDef.frames,
-            interval = animationDef.interval
+            interval = animationDef.interval,
+            looping = animationDef.looping or true
         }
     end
 

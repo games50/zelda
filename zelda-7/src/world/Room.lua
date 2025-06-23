@@ -290,7 +290,7 @@ function Room:render()
     -- DEBUG DRAWING OF STENCIL RECTANGLES
     --
 
-    -- love.graphics.setColor(255, 0, 0, 100)
+    -- love.graphics.setColor(1, 0, 0, 100/255)
     
     -- -- left
     -- love.graphics.rectangle('fill', -TILE_SIZE - 6, MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE,
@@ -308,5 +308,5 @@ function Room:render()
     -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
     --     VIRTUAL_HEIGHT - TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
     
-    -- love.graphics.setColor(255, 255, 255, 255)
+    -- love.graphics.setColor(1, 1, 1, 1)
 end
