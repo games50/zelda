@@ -7,6 +7,7 @@
 ]]
 
 Room = Class{}
+stencilDebug = false
 
 function Room:init(player, x, y)
     self.width = MAP_WIDTH
@@ -197,6 +198,10 @@ function Room:update(dt)
             object:onCollide()
         end
     end
+
+    if love.keyboard.wasPressed('s') then
+        stencilDebug = not stencilDebug
+    end
 end
 
 function Room:render()
@@ -290,23 +295,25 @@ function Room:render()
     -- DEBUG DRAWING OF STENCIL RECTANGLES
     --
 
-    -- love.graphics.setColor(1, 0, 0, 100/255)
-    
-    -- -- left
-    -- love.graphics.rectangle('fill', -TILE_SIZE - 6, MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE,
-    -- TILE_SIZE * 2 + 6, TILE_SIZE * 2)
+    if stencilDebug then
+        love.graphics.setColor(1, 0, 0, 100/255)
+        
+        -- left
+        love.graphics.rectangle('fill', -TILE_SIZE - 6, MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE,
+        TILE_SIZE * 2 + 6, TILE_SIZE * 2)
 
-    -- -- right
-    -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH * TILE_SIZE),
-    --     MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE, TILE_SIZE * 2 + 6, TILE_SIZE * 2)
+        -- right
+        love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH * TILE_SIZE),
+            MAP_RENDER_OFFSET_Y + (MAP_HEIGHT / 2) * TILE_SIZE - TILE_SIZE, TILE_SIZE * 2 + 6, TILE_SIZE * 2)
 
-    -- -- top
-    -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
-    --     -TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
+        -- top
+        love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
+            -TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
 
-    -- --bottom
-    -- love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
-    --     VIRTUAL_HEIGHT - TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
-    
-    -- love.graphics.setColor(1, 1, 1, 1)
+        --bottom
+        love.graphics.rectangle('fill', MAP_RENDER_OFFSET_X + (MAP_WIDTH / 2) * TILE_SIZE - TILE_SIZE,
+            VIRTUAL_HEIGHT - TILE_SIZE - 6, TILE_SIZE * 2, TILE_SIZE * 2 + 12)
+        
+        love.graphics.setColor(1, 1, 1, 1)
+    end
 end
