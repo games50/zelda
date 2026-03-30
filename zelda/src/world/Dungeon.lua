@@ -27,34 +27,63 @@ function Dungeon:init(player, rooms, startX, startY)
 
     -- trigger camera translation and adjustment of rooms whenever the player triggers a shift
     -- via a doorway collision, triggered in PlayerWalkState
-    Event.on('shift-left', function()
-        self:beginShifting(-VIRTUAL_WIDTH, 0)
-    end)
+    self.shiftHandlers = {
+        Event.on('shift-left', function()
+            self:beginShifting(-VIRTUAL_WIDTH, 0)
+            return false
+        end),
+        Event.on('shift-right', function()
+            self:beginShifting(VIRTUAL_WIDTH, 0)
+            return false
+        end),
+        Event.on('shift-up', function()
+            self:beginShifting(0, -VIRTUAL_HEIGHT)
+            return false
+        end),
+        Event.on('shift-down', function()
+            self:beginShifting(0, VIRTUAL_HEIGHT)
+            return false
+        end)
+    }
+end
 
-    Event.on('shift-right', function()
-        self:beginShifting(VIRTUAL_WIDTH, 0)
-    end)
+--[[
+    "Destroys" the dungeon, removing any event handlers that were active for shifting.
+    Otherwise, we can run into an issue where the next dungeon will trigger stale
+    handlers and potentially crash the game.
+]]
+function Dungeon:destroy()
+    if not self.shiftHandlers then
+        return
+    end
 
-    Event.on('shift-up', function()
-        self:beginShifting(0, -VIRTUAL_HEIGHT)
-    end)
+    for _, handler in ipairs(self.shiftHandlers) do
+        handler:remove()
+    end
 
-    Event.on('shift-down', function()
-        self:beginShifting(0, VIRTUAL_HEIGHT)
-    end)
+    self.shiftHandlers = nil
 end
 
 --[[
     Prepares for the camera shifting process, kicking off a tween of the camera position.
 ]]
 function Dungeon:beginShifting(shiftX, shiftY)
+    if self.shifting or not self.currentRoom then
+        return
+    end
+
+    local nextRoomX = self.currentRoom.x + (shiftX > 0 and 1 or (shiftX < 0 and -1 or 0))
+    local nextRoomY = self.currentRoom.y + (shiftY > 0 and 1 or (shiftY < 0 and -1 or 0))
+    local nextRoom = self.rooms[nextRoomY] and self.rooms[nextRoomY][nextRoomX]
+
+    if not nextRoom then
+        return
+    end
 
     -- commence shifting and load room we're transitioning to
     self.shifting = true
-    
-    local nextRoomX = self.currentRoom.x + (shiftX > 0 and 1 or (shiftX < 0 and -1 or 0))
-    local nextRoomY = self.currentRoom.y + (shiftY > 0 and 1 or (shiftY < 0 and -1 or 0))
-    self.nextRoom = self.rooms[nextRoomY] and self.rooms[nextRoomY][nextRoomX]
+    self.nextRoom = nextRoom
+
 
     -- start all doors in next room as open until we get in
     for k, doorway in pairs(self.nextRoom.doorways) do

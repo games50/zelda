@@ -50,6 +50,10 @@ function PlayState:update(dt)
     self.dungeon:update(dt)
 end
 
+function PlayState:exit()
+    self.dungeon:destroy()
+end
+
 function PlayState:render()
     -- render dungeon and all entities separate from hearts GUI
     love.graphics.push()
