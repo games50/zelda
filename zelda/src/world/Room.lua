@@ -173,7 +173,7 @@ function Room:update(dt)
     for i = #self.entities, 1, -1 do
         local entity = self.entities[i]
 
-        -- remove entity from the table if health is <= 0
+        -- mark entities as "dead" so they aren't updated
         if entity.health <= 0 then
             entity.dead = true
         elseif not entity.dead then

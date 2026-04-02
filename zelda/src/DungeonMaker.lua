@@ -12,7 +12,7 @@
     for the problem set).
 
     The DungeonMaker's generate function will essentially crawl through the
-    dungeon and operate like a random stack-based maze generator, where
+    dungeon and operate like a random queue-based maze generator, where
     it will randomly select a room to create, then randomly select a direction
     to create a new room in, and then continue until it has created a certain
     number of rooms or reached a certain depth.
@@ -103,6 +103,34 @@ function DungeonMaker.generateGen(player, maxRooms)
                 end
 
                 ::continue::
+            end
+
+            -- this might happen if the queue exhausts before we hit a full dungeon, meaning
+            -- we need to pre-seed it with frontier rooms
+            if head > #queue and numRooms < maxRooms then
+                for y = 1, maxRooms do
+                    for x = 1, maxRooms do
+                        if rooms[y][x] then
+                            -- try to add adjacent rooms to the queue if they haven't been visited
+                            local adjacents = {
+                                {x = x, y = y - 1},
+                                {x = x, y = y + 1},
+                                {x = x - 1, y = y},
+                                {x = x + 1, y = y}
+                            }
+
+                            for _, adj in ipairs(adjacents) do
+                                local ax, ay = adj.x, adj.y
+                                local key = ax .. ',' .. ay
+                                if ax >= 1 and ax <= maxRooms and ay >= 1 and ay <= maxRooms
+                                    and not visited[key] then
+                                    visited[key] = true
+                                    queue[#queue + 1] = { x = ax, y = ay }
+                                end
+                            end
+                        end
+                    end
+                end
             end
 
             coroutine.yield {
@@ -214,6 +242,34 @@ function DungeonMaker.generate(player, maxRooms)
             end
 
             ::continue::
+        end
+
+        -- this might happen if the queue exhausts before we hit a full dungeon, meaning
+        -- we need to pre-seed it with frontier rooms
+        if head > #queue and numRooms < maxRooms then
+            for y = 1, maxRooms do
+                for x = 1, maxRooms do
+                    if rooms[y][x] then
+                        -- try to add adjacent rooms to the queue if they haven't been visited
+                        local adjacents = {
+                            {x = x, y = y - 1},
+                            {x = x, y = y + 1},
+                            {x = x - 1, y = y},
+                            {x = x + 1, y = y}
+                        }
+
+                        for _, adj in ipairs(adjacents) do
+                            local ax, ay = adj.x, adj.y
+                            local key = ax .. ',' .. ay
+                            if ax >= 1 and ax <= maxRooms and ay >= 1 and ay <= maxRooms
+                                and not visited[key] then
+                                visited[key] = true
+                                queue[#queue + 1] = { x = ax, y = ay }
+                            end
+                        end
+                    end
+                end
+            end
         end
     end
 
